@@ -1,40 +1,64 @@
+import 'package:bytebank_ofc/database/app_database.dart';
 import 'package:bytebank_ofc/screens/contact_form.dart';
 import 'package:flutter/material.dart';
 
 import '../model/contact.dart';
 
 class ContactsList extends StatelessWidget {
-   ContactsList({Key? key}) : super(key: key);
-
-  final List<Contact> contacts = [];
+  ContactsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    contacts.add(Contact(0, 'alex', 1000));
-    contacts.add(Contact(0, 'alex', 1000));
-    contacts.add(Contact(0, 'alex', 1000));
-    contacts.add(Contact(0, 'alex', 1000));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text('Contacts'),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final Contact contact = contacts[index];
-          return _ContactItem(contact);
+      body: FutureBuilder<List<Contact>>(
+        initialData: [],
+        future: findAll(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text('Loading'),
+                  ],
+                ),
+              );
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              final contacts = (snapshot.data as List);
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final Contact contact = contacts[index];
+                  return _ContactItem(contact);
+                },
+                itemCount: contacts.length,
+              );
+              break;
+          }
+
+          return Text('Unknown error');
         },
-        itemCount: contacts.length,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ContactForm(),
-            ),
-          ).then((newContact) => debugPrint(newContact.toString()));
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (context) => ContactForm(),
+                ),
+              )
+              .then((newContact) => debugPrint(newContact.toString()));
         },
         child: const Icon(
           Icons.add,
@@ -45,7 +69,6 @@ class ContactsList extends StatelessWidget {
 }
 
 class _ContactItem extends StatelessWidget {
-
   final Contact contact;
 
   _ContactItem(this.contact);
@@ -66,5 +89,4 @@ class _ContactItem extends StatelessWidget {
       ),
     );
   }
-
 }
