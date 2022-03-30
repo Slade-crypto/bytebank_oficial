@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import '../database/dao/contact_dao.dart';
 import '../model/contact.dart';
 
-class ContactsList extends StatelessWidget {
+class ContactsList extends StatefulWidget {
   ContactsList({Key? key}) : super(key: key);
 
+  @override
+  State<ContactsList> createState() => _ContactsListState();
+}
+
+class _ContactsListState extends State<ContactsList> {
   final ContactDao _dao = ContactDao();
 
   @override
@@ -52,11 +57,13 @@ class ContactsList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ContactForm(),
-            ),
-          );
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (context) => const ContactForm(),
+                ),
+              )
+              .then((value) => setState(() {}));
         },
         child: const Icon(
           Icons.add,
