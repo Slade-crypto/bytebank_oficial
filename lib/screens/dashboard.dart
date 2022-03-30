@@ -9,7 +9,7 @@ class DashBoard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('DashBoard'),
+        title: const Text('DashBoard'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,13 +32,13 @@ class DashBoard extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   height: 100,
                   width: 150,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.people,
                         color: Colors.white,
